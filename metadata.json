@@ -1,0 +1,10 @@
+{
+  "name": "Animal Light AI",
+  "description": "Discover wildlife with smart animal scanning, species identification, interactive habitat maps, diet, and conservation status.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

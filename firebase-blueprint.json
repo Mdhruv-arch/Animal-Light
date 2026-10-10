@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "Animal": {
+      "title": "Animal",
+      "description": "Biological and ecological profile of a wildlife species",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique species identifier" },
+        "commonName": { "type": "string", "description": "Common name of the animal" },
+        "scientificName": { "type": "string", "description": "Taxonomic binomial name" },
+        "classification": { "type": "string", "description": "Taxonomic class (e.g. Mammal, Bird, Reptile)" },
+        "taxonomy": {
+          "type": "object",
+          "description": "Hierarchical taxonomy details"
+        },
+        "referencePhoto": {
+          "type": "object",
+          "description": "Verified reference photo record with attribution"
+        },
+        "overview": { "type": "string", "description": "General ecological summary" },
+        "behaviour": { "type": "string", "description": "Behavioral characteristics" },
+        "size": { "type": "string", "description": "Average physical length or height" },
+        "weight": { "type": "string", "description": "Average body mass" },
+        "lifespan": { "type": "string", "description": "Average wild lifespan" },
+        "dietType": { "type": "string", "description": "Trophic classification" },
+        "habitatSummary": { "type": "string", "description": "Habitat environment description" },
+        "geographicDistribution": { "type": "array", "description": "Endemic countries and zones" },
+        "conservation": { "type": "object", "description": "IUCN Red List status and threats" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "commonName", "scientificName", "classification", "dietType"]
+    },
+    "Scan": {
+      "title": "Scan",
+      "description": "Record of an animal photo scan and AI identification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Scan unique identifier" },
+        "userId": { "type": "string", "description": "User or device session ID" },
+        "commonName": { "type": "string", "description": "Identified common name" },
+        "scientificName": { "type": "string", "description": "Identified scientific name" },
+        "classification": { "type": "string", "description": "Taxonomic class" },
+        "confidence": { "type": "number", "description": "AI confidence score percentage" },
+        "isAnimal": { "type": "boolean", "description": "Whether an animal was verified" },
+        "visualClues": { "type": "array", "description": "Detected physical traits" },
+        "uncertaintyExplanation": { "type": "string", "description": "Certainty reasoning" },
+        "scannedAt": { "type": "string", "description": "Human readable timestamp" },
+        "timestamp": { "type": "number", "description": "Unix epoch timestamp" },
+        "uploadedImageUrl": { "type": "string", "description": "Scanned image URI" },
+        "referencePhoto": { "type": "object", "description": "Matched reference photo" }
+      },
+      "required": ["id", "commonName", "scientificName", "confidence", "timestamp"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "User favorited species bookmark",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Favorite record ID" },
+        "userId": { "type": "string", "description": "User or device session ID" },
+        "animalId": { "type": "string", "description": "Linked animal species ID" },
+        "commonName": { "type": "string", "description": "Common name of species" },
+        "scientificName": { "type": "string", "description": "Scientific binomial name" },
+        "classification": { "type": "string", "description": "Taxonomic class" },
+        "imageUrl": { "type": "string", "description": "Thumbnail image URI" },
+        "createdAt": { "type": "number", "description": "Creation epoch timestamp" }
+      },
+      "required": ["id", "animalId", "commonName", "scientificName", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/animals/{animalId}": {
+      "schema": "Animal",
+      "description": "Verified global wildlife inventory documents"
+    },
+    "/scans/{scanId}": {
+      "schema": "Scan",
+      "description": "User-generated scan records and AI identifications"
+    },
+    "/favorites/{favoriteId}": {
+      "schema": "Favorite",
+      "description": "User favorited wildlife bookmark records"
+    }
+  }
+}

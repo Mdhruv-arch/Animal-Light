@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for validation
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function isNonEmptyString(str, maxLen) {
+      return str is string && str.size() > 0 && str.size() <= maxLen;
+    }
+
+    // Animals Collection: Verified reference knowledge inventory
+    match /animals/{animalId} {
+      allow read: if isValidId(animalId);
+      allow write: if isValidId(animalId) &&
+        request.resource.data.id is string &&
+        isNonEmptyString(request.resource.data.commonName, 100) &&
+        isNonEmptyString(request.resource.data.scientificName, 100);
+    }
+
+    // Scans Collection: Identification history records
+    match /scans/{scanId} {
+      allow read: if isValidId(scanId);
+      allow create: if isValidId(scanId) &&
+        request.resource.data.id is string &&
+        isNonEmptyString(request.resource.data.commonName, 100) &&
+        isNonEmptyString(request.resource.data.scientificName, 100) &&
+        request.resource.data.confidence is number &&
+        request.resource.data.timestamp is number;
+      allow update, delete: if isValidId(scanId);
+    }
+
+    // Favorites Collection: User saved animal bookmarks
+    match /favorites/{favoriteId} {
+      allow read: if isValidId(favoriteId);
+      allow create: if isValidId(favoriteId) &&
+        request.resource.data.id is string &&
+        isNonEmptyString(request.resource.data.animalId, 100) &&
+        isNonEmptyString(request.resource.data.commonName, 100) &&
+        request.resource.data.createdAt is number;
+      allow update, delete: if isValidId(favoriteId);
+    }
+  }
+}
